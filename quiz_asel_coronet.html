@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fff7fb">
+  <title>Персональный разбор — лазерная эпиляция</title>
+  <style>
+    :root {
+      --bg:#fff8fb; --card:#fff; --pink:#f35f99; --pink2:#ff98bf;
+      --ink:#2b2028; --muted:#806f79; --line:#f0d9e3;
+      --shadow:0 20px 60px rgba(145,68,102,.14); --r:28px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; min-height:100vh; display:flex; justify-content:center; padding:20px;
+      font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 0% 0%,#ffe7f1 0,transparent 31%),
+        radial-gradient(circle at 100% 100%,#ffedf5 0,transparent 35%),
+        var(--bg);
+    }
+    .app{width:min(100%,720px);min-height:calc(100vh - 40px);display:flex;flex-direction:column}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin:4px 2px 18px}
+    .brand{font-family:Georgia,"Times New Roman",serif;font-size:22px;letter-spacing:.04em}
+    .brand span{color:var(--pink)}
+    .stepLabel{font-size:13px;color:var(--muted);font-weight:700}
+    .progress{height:7px;background:#f7dbe7;border-radius:999px;overflow:hidden;margin-bottom:18px}
+    .progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--pink2));border-radius:999px;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+    .screen{display:none;animation:fadeUp .38s ease both} .screen.active{display:block}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+    .card{background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow);border-radius:var(--r);padding:28px}
+    .hero{padding:38px 30px 32px;text-align:center;position:relative;overflow:hidden}
+    .hero:before{content:"";position:absolute;width:210px;height:210px;background:#ffe1ed;border-radius:50%;right:-100px;top:-105px;filter:blur(2px)}
+    .hero:after{content:"";position:absolute;width:140px;height:140px;background:#fff0f6;border-radius:50%;left:-70px;bottom:-60px}
+    .pill{display:inline-flex;align-items:center;gap:8px;background:#fff0f6;color:#a13e69;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:800;margin-bottom:19px;position:relative;z-index:1}
+    h1,h2{margin:0;line-height:1.08;letter-spacing:-.035em}
+    h1{font-size:clamp(34px,7vw,58px)} h2{font-size:clamp(28px,6vw,44px)} .accent{color:var(--pink)}
+    .sub{color:var(--muted);font-size:17px;line-height:1.55;margin:18px auto 0;max-width:570px}
+    .btn{appearance:none;border:0;cursor:pointer;width:100%;border-radius:18px;padding:17px 20px;font-size:16px;font-weight:800;transition:.2s ease}
+    .btn.primary{color:#fff;background:linear-gradient(135deg,#ef5a95,#ff8eb8);box-shadow:0 12px 28px rgba(239,90,149,.28)}
+    .btn.primary:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(239,90,149,.34)}
+    .btn.secondary{background:#fff;color:var(--muted);border:1px solid var(--line)}
+    .hero .btn{margin-top:27px;position:relative;z-index:1} .mini{font-size:13px;color:var(--muted);margin-top:13px}
+    .questionHead{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
+    .qnum{min-width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#ff78aa,#ef5792);color:#fff;display:grid;place-items:center;font-weight:900}
+    .questionHead p{margin:8px 0 0;color:var(--muted);font-size:14px}
+    .visual{width:100%;border-radius:22px;margin:4px 0 20px;overflow:hidden;border:1px solid #f3d7e3;background:#fff}
+    .visual img{display:block;width:100%;height:auto;max-height:430px;object-fit:cover}
+    .options{display:grid;gap:12px}
+    .option{display:flex;align-items:center;gap:13px;padding:16px;border:1.5px solid var(--line);background:#fff;border-radius:18px;cursor:pointer;transition:.2s ease;font-weight:700}
+    .option:hover{transform:translateY(-1px);border-color:#f4a6c5;box-shadow:0 8px 18px rgba(178,92,130,.08)}
+    .option.selected{border-color:var(--pink);background:#fff2f7;box-shadow:0 0 0 4px rgba(243,95,153,.09)}
+    .dot{width:24px;height:24px;border-radius:9px;border:2px solid #eab8cd;display:grid;place-items:center;flex:0 0 auto}
+    .selected .dot{background:var(--pink);border-color:var(--pink);color:#fff} .selected .dot:after{content:"✓";font-size:14px;font-weight:900}
+    .nav{display:grid;grid-template-columns:1fr 1.8fr;gap:10px;margin-top:20px}
+    .leadCard{text-align:center} .successIcon{width:72px;height:72px;border-radius:24px;margin:0 auto 18px;background:linear-gradient(135deg,#ffd9e8,#fff);display:grid;place-items:center;font-size:34px;box-shadow:0 14px 28px rgba(245,111,165,.16)}
+    .form{display:grid;gap:12px;text-align:left;margin-top:24px} label{font-size:13px;font-weight:800;color:#6c5b65}
+    input{width:100%;padding:16px 17px;border:1.5px solid var(--line);border-radius:16px;font-size:16px;outline:0;background:#fff;transition:.2s}
+    input:focus{border-color:var(--pink);box-shadow:0 0 0 4px rgba(243,95,153,.09)}
+    .privacy{font-size:12px;color:#907d88;line-height:1.45}
+    .done{text-align:center} .done .check{font-size:46px;margin-bottom:10px}
+    .summary{margin-top:20px;padding:16px;border:1px solid var(--line);border-radius:18px;background:#fffafd;text-align:left;font-size:14px;color:#6e5965;line-height:1.55}
+    .footer{margin-top:auto;text-align:center;color:#a5909b;font-size:12px;padding:18px 4px 2px}
+    @media(max-width:520px){
+      body{padding:12px} .app{min-height:calc(100vh - 24px)} .card{padding:21px} .hero{padding:30px 20px}
+      .nav{grid-template-columns:1fr} .nav .secondary{order:2} .brand{font-size:20px}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">asel.<span>coronet</span></div>
+    <div class="stepLabel" id="stepLabel">Старт</div>
+  </div>
+  <div class="progress"><div id="progressBar"></div></div>
+
+  <section class="screen active" data-screen="0">
+    <div class="card hero">
+      <div class="pill">✨ Персональный разбор</div>
+      <h1>Узнайте, подойдёт ли вам <span class="accent">лазерная эпиляция</span></h1>
+      <p class="sub">Ответьте на 4 коротких вопроса и получите персональный разбор вашей ситуации.</p>
+      <button class="btn primary" onclick="go(1)">Пройти тест →</button>
+      <div class="mini">Около 30 секунд</div>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="1"><div class="card">
+    <div class="questionHead"><div class="qnum">1</div><div><h2>Как вы сейчас удаляете волосы?</h2><p>Выберите один вариант</p></div></div>
+    <div class="visual"><img src="question_1.jpg" alt="Способы удаления волос"></div>
+    <div class="options" data-q="q1">
+      <div class="option" data-v="Бритва"><span class="dot"></span>Бритва</div>
+      <div class="option" data-v="Воск"><span class="dot"></span>Воск</div>
+      <div class="option" data-v="Шугаринг"><span class="dot"></span>Шугаринг</div>
+      <div class="option" data-v="Крем для депиляции"><span class="dot"></span>Крем для депиляции</div>
+    </div>
+    <div class="nav"><button class="btn secondary" onclick="go(0)">Назад</button><button class="btn primary" onclick="next(1)">Далее →</button></div>
+  </div></section>
+
+  <section class="screen" data-screen="2"><div class="card">
+    <div class="questionHead"><div class="qnum">2</div><div><h2>Что беспокоит больше всего после удаления волос?</h2><p>Выберите наиболее близкий вариант</p></div></div>
+    <div class="visual"><img src="question_2.jpg" alt="Проблемы после удаления волос"></div>
+    <div class="options" data-q="q2">
+      <div class="option" data-v="Раздражение и краснота"><span class="dot"></span>Раздражение и краснота</div>
+      <div class="option" data-v="Вросшие волосы"><span class="dot"></span>Вросшие волосы</div>
+      <div class="option" data-v="Воспаления и гнойнички"><span class="dot"></span>Воспаления и гнойнички</div>
+      <div class="option" data-v="Быстро отрастают колючки"><span class="dot"></span>Быстро отрастают колючки</div>
+    </div>
+    <div class="nav"><button class="btn secondary" onclick="go(1)">Назад</button><button class="btn primary" onclick="next(2)">Далее →</button></div>
+  </div></section>
+
+  <section class="screen" data-screen="3"><div class="card">
+    <div class="questionHead"><div class="qnum">3</div><div><h2>Какая у вас кожа?</h2><p>Выберите наиболее похожий оттенок</p></div></div>
+    <div class="visual"><img src="question_3.jpg" alt="Оттенки кожи"></div>
+    <div class="options" data-q="q3">
+      <div class="option" data-v="Светлая"><span class="dot"></span>Светлая</div>
+      <div class="option" data-v="Средняя"><span class="dot"></span>Средняя</div>
+      <div class="option" data-v="Смуглая"><span class="dot"></span>Смуглая</div>
+    </div>
+    <div class="nav"><button class="btn secondary" onclick="go(2)">Назад</button><button class="btn primary" onclick="next(3)">Далее →</button></div>
+  </div></section>
+
+  <section class="screen" data-screen="4"><div class="card">
+    <div class="questionHead"><div class="qnum">4</div><div><h2>Что для вас важнее всего во время процедуры?</h2><p>Выберите главный приоритет</p></div></div>
+    <div class="visual"><img src="question_4.jpg" alt="Что важно во время процедуры"></div>
+    <div class="options" data-q="q4">
+      <div class="option" data-v="Безболезненность"><span class="dot"></span>😌 Безболезненность</div>
+      <div class="option" data-v="Безопасность"><span class="dot"></span>🛡️ Безопасность</div>
+      <div class="option" data-v="Скорость"><span class="dot"></span>⚡ Скорость</div>
+    </div>
+    <div class="nav"><button class="btn secondary" onclick="go(3)">Назад</button><button class="btn primary" onclick="next(4)">Получить разбор →</button></div>
+  </div></section>
+
+  <section class="screen" data-screen="5"><div class="card leadCard">
+    <div class="successIcon">💗</div>
+    <h2>Ваш персональный разбор почти готов</h2>
+    <p class="sub">Оставьте имя и номер телефона, по которому мы сможем связаться с вами. Специалист посмотрит ответы и <b>в течение дня сообщит результат</b>: подойдёт ли вам лазерная эпиляция и с чего лучше начать.</p>
+    <div class="form">
+      <div><label>Имя</label><input id="name" placeholder="Например, Айдана" autocomplete="name"></div>
+      <div><label>Номер телефона</label><input id="phone" placeholder="+996 ___ ___ ___" inputmode="tel" autocomplete="tel"></div>
+      <button class="btn primary" onclick="submitQuiz()">Получить персональный разбор →</button>
+      <div class="privacy">Нажимая кнопку, вы соглашаетесь на обработку контактных данных для связи по вашему запросу.</div>
+    </div>
+  </div></section>
+
+  <section class="screen" data-screen="6"><div class="card done">
+    <div class="check">✅</div>
+    <h2>Спасибо! Ответы получены</h2>
+    <p class="sub">Специалист изучит вашу ситуацию и свяжется с вами <b>в течение дня</b> по указанному номеру.</p>
+    <div class="summary" id="summary"></div>
+    <button class="btn primary" style="margin-top:18px" onclick="openWhatsApp()">Отправить ответы в WhatsApp →</button>
+  </div></section>
+
+  <div class="footer">asel.coronet · Бишкек</div>
+</div>
+
+<script>
+const state={q1:"",q2:"",q3:"",q4:"",name:"",phone:""};
+document.querySelectorAll(".options").forEach(group=>{
+  group.querySelectorAll(".option").forEach(opt=>{
+    opt.addEventListener("click",()=>{
+      group.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));
+      opt.classList.add("selected");
+      state[group.dataset.q]=opt.dataset.v;
+    });
+  });
+});
+function go(n){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.querySelector('[data-screen="'+n+'"]').classList.add("active");
+  let pct=0,label="Старт";
+  if(n>=1&&n<=4){pct=(n/4)*80;label="Вопрос "+n+" из 4";}
+  if(n===5){pct=92;label="Контакты";}
+  if(n===6){pct=100;label="Готово";}
+  document.getElementById("progressBar").style.width=pct+"%";
+  document.getElementById("stepLabel").textContent=label;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function next(q){
+  const key="q"+q;
+  if(!state[key]){
+    const group=document.querySelector('[data-q="'+key+'"]');
+    group.animate([{transform:"translateX(0)"},{transform:"translateX(-7px)"},{transform:"translateX(7px)"},{transform:"translateX(0)"}],{duration:300});
+    return;
+  }
+  go(q===4?5:q+1);
+}
+function submitQuiz(){
+  const name=document.getElementById("name").value.trim();
+  const phone=document.getElementById("phone").value.trim();
+  if(!name||phone.length<7){alert("Пожалуйста, укажите имя и номер телефона.");return;}
+  state.name=name;state.phone=phone;
+  document.getElementById("summary").innerHTML="<b>Ваши ответы:</b><br>Способ удаления: "+state.q1+"<br>Что беспокоит: "+state.q2+"<br>Оттенок кожи: "+state.q3+"<br>Главный приоритет: "+state.q4;
+  go(6);
+}
+function openWhatsApp(){
+  const text=`Новая заявка с квиза Instagram
+
+Имя: ${state.name}
+Телефон: ${state.phone}
+
+1. Способ удаления: ${state.q1}
+2. Что беспокоит: ${state.q2}
+3. Оттенок кожи: ${state.q3}
+4. Главный приоритет: ${state.q4}
+
+Источник: квиз с рекламы Instagram`;
+  location.href="https://wa.me/996700611746?text="+encodeURIComponent(text);
+}
+</script>
+</body>
+</html>
